@@ -14,25 +14,15 @@ import hashlib
 
 # GitHub GraphQL API authentication
 
-ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
-
-if not ACCESS_TOKEN:
-
-    print("::error::ACCESS_TOKEN environment variable is not set!")
-
-    print("Please go to your repository Settings -> Secrets and variables -> Actions and add ACCESS_TOKEN.")
-
-    exit(1)
-
+ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN', '')
 USER_NAME = os.environ.get('USER_NAME', 'An16og')
-
-HEADERS = {'authorization': 'token ' + ACCESS_TOKEN}
+HEADERS = {'authorization': 'token ' + ACCESS_TOKEN} if ACCESS_TOKEN else {}
 
 QUERY_COUNT = {'user_getter': 0, 'follower_getter': 0, 'graph_repos_stars': 0, 'recursive_loc': 0, 'graph_commits': 0, 'loc_query': 0}
 
 # Configure your birthday here (Year, Month, Day) to calculate uptime
 
-BIRTHDAY = datetime.datetime(2003, 1, 1)
+BIRTHDAY = datetime.datetime(2005, 6, 16)
 
 def daily_readme(birthday):
 
@@ -726,6 +716,10 @@ def formatter(query_type, difference, funct_return=False, whitespace=0):
     return funct_return
 
 if __name__ == '__main__':
+    if not ACCESS_TOKEN:
+        print("::error::ACCESS_TOKEN environment variable is not set!")
+        print("Please go to your repository Settings -> Secrets and variables -> Actions and add ACCESS_TOKEN.")
+        exit(1)
 
     print('Calculation times:')
 
